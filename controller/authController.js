@@ -13,9 +13,15 @@ const signToken = (id) => {
   });
 };
 
+const generateRefreshToken = (id) => {
+  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "2d" });
+};
 const createSendToken = (user, statusCode, res) => {
+  // Generate tokens
   const token = signToken(user._id);
   const refreshToken = generateRefreshToken(user._id);
+
+  // Define cookie options
   const cookieOptions = {
     expires: new Date(
       Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
@@ -25,25 +31,25 @@ const createSendToken = (user, statusCode, res) => {
     sameSite: "None",
   };
 
+  // Set cookies
   res.cookie("jwt", token, cookieOptions);
   res.cookie("refreshToken", refreshToken, {
     ...cookieOptions,
     expires: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
   });
+
+  // Remove sensitive information
   user.password = undefined;
-  res.status(statusCode).json({
+
+  // Send response
+  return res.status(statusCode).json({
     status: "success",
     token,
     refreshToken,
-    data: {
-      user: user,
-    },
+    data: { user },
   });
 };
 
-const generateRefreshToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "2d" });
-};
 // authentication
 const protect = async (req, res, next) => {
   // 1. getting the token if there or not
@@ -114,6 +120,7 @@ const signup = async (req, res) => {
   });
   createSendToken(newUser, 201, res);
 };
+
 // login
 const login = async (req, res) => {
   const { email, password } = req.body;
@@ -142,6 +149,7 @@ const login = async (req, res) => {
   createSendToken(user, 200, res);
 };
 
+// logout
 const logout = (req, res) => {
   res.cookie("jwt", "loggedout", {
     expires: new Date(Date.now() + 10 * 1000),

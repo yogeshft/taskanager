@@ -1,4 +1,3 @@
-const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const app = require("./app");
@@ -9,7 +8,7 @@ const database = process.env.MONGODB_URL.replace(
 );
 const port = process.env.PORT || 3000;
 
-// write what happens on uncought exception and promise rejection
+// write what happens on uncaught exception and promise rejection
 
 mongoose
   .connect(database)

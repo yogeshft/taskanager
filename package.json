@@ -7,7 +7,7 @@
     "start": "nodemon server.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "tanmay and yogesh",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.1",

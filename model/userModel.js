@@ -15,6 +15,12 @@ const userSchema = new mongoose.Schema(
       unique: true,
       lowercase: true,
     },
+    // tasks: [
+    //   {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: "Task",
+    //   },
+    // ],
     password: {
       type: String,
       required: [true, "password is required"],

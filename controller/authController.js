@@ -16,6 +16,7 @@ const signToken = (id) => {
 const generateRefreshToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "2d" });
 };
+
 const createSendToken = (user, statusCode, res) => {
   // Generate tokens
   const token = signToken(user._id);
